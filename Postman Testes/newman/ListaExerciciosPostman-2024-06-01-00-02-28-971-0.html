@@ -1,0 +1,2405 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-y: scroll;">
+<head>
+  <meta charset="UTF-8">
+  <title>Newman Summary Report</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+
+<style>
+code.renderMarkdown table, code.renderMarkdown th, code.renderMarkdown td {
+    border: 1px solid black;
+    width: max-content;
+    padding: .75rem;
+}
+
+.theme-dark {
+    --background-color: #222;
+    --bg-card-deck: #444444;
+    --text-color: #ccd2d8;
+    --tab-border: solid 1px #444;
+    --success: #3c9372;
+    --failure: #c24a3f;
+    --warning: #d28c23;
+    --info: #4083b6;
+    --badge-outline: #3c9372;
+    --badge-bg: #cdd3db;
+    --badge-text: #ccd2d9;
+    --failure-row: #c24a3f;
+    --warning-row: #d28c23;
+    --card-bg: #444;
+    --card-footer: #4f5758;
+    --form-input: #ececb5;
+    --hov-text: #d2dae5;
+    --h4-text: #ccd1d9;
+}
+
+.theme-light {
+    --tab-border: solid 1px #fff;
+    --text-color: #000000;
+    --success: #42a745;
+    --failure: #dc3544;
+    --warning: #f4c10b;
+    --info: #49a1b8;
+    --badge-outline: #040411;
+    --badge-bg: #f8f9fa;
+    --badge-text: #fff;
+    --failure-row: #f5c6cb;
+    --warning-row: #ffeeba;
+    --card-bg: #f7f7f7;
+    --hov-text: #fff;
+    --h4-text: #ffffff;
+}
+
+body {
+  padding-top:30px;
+  background-color: var(--background-color)!important;
+  color: var(--text-color);
+}
+
+#execution-data {
+  padding: 10px;
+  border: var(--tab-border);
+  border-top: none;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+  height: 105px;
+  overflow-y: auto;
+}
+
+body.theme-dark .card-header {
+    background-color: #444;
+}
+
+body.theme-light .card-header {
+    background-color: #f7f7f7;
+}
+
+.card-footer {
+    padding: .75rem 1.25rem;
+    background-color: var(--card-footer);
+}
+
+.card-deck {
+    background-color: var(--bg-card-deck)!important;
+}
+.form-control {
+    background: var(--form-input);
+}
+
+.custom-tab {
+  padding: 10px 15px;
+  margin-right: 0px;
+  height: 47px;
+  width: 69px;
+  text-align: center;
+  border: var(--tab-border);
+  border-bottom: none;
+  cursor:pointer;
+}
+
+body.theme-dark .text-white {
+    color: #ccd2d9!important;
+}
+h4 {
+    color: var(--h4-text);
+}
+
+body.theme-dark h1 {
+    color: #ccd2da;
+}
+
+body.theme-dark .bg-light>td {
+    background: #4f5858!important;
+}
+
+body.theme-dark .hljs {
+    background: #0a0a0ab0!important;
+    color: #8d8787!important;
+}
+
+.bg-info {
+    background-color: var(--info)!important;
+}
+.bg-success {
+    background-color: var(--success)!important;
+}
+
+.alert-success {
+    background-color: var(--success)!important;
+}
+
+.alert-warning {
+    background-color: var(--warning)!important;
+}
+
+.alert-info {
+    background-color: var(--info)!important;
+}
+
+.bg-warning {
+    background-color: var(--warning)!important;
+}
+
+.badge-warning {
+    color: var(--badge-text)!important;
+    background-color: var(--warning)!important;
+}
+
+.table-warning>td {
+    background-color: var(--warning-row);
+}
+
+.alert-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .alert-dark {
+    background-color: #636467!important;
+}
+
+body.theme-dark .text-dark {
+    color: #d1dae4!important;
+}
+
+body.theme-dark .badge-light {
+    color: #212529;
+    background-color: #cdd3db;
+}
+
+body.theme-light .badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+body.theme-light .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.table-danger>td {
+    background-color: var(--failure-row);
+}
+
+body.theme-dark .table .thead-light th {
+    background-color: #4f5858!important;
+    border-color: #dee2e6!important;
+    color: #ccd2d8!important;
+}
+
+.itPassed {
+  background: var(--success);
+  color: white;
+}
+.itFailed {
+  background: var(--failure);
+  color: white;
+}
+
+.resultsInfoPass {
+  color: var(--success);
+  padding-top: 4px;
+}
+
+.resultsInfoFail {
+  color: var(--failure);
+  padding-top: 4px;
+}
+
+.badge-outline-success {
+  color: var(--success);
+  border: 1px solid var(--success);
+  background-color: transparent;
+}
+
+.badge-outline {
+  color: var(--badge-outline);
+  border: 1px solid var(--badge-outline);
+  background-color: transparent;
+}
+
+.btn-outline-success {
+    color: var(--success)!important;
+    border-color: var(--success)!important;
+}
+
+.backToTop:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-success:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-secondary {
+  background-color: var(--success)!important;
+  color: var(--hov-text)!important;
+}
+
+body.theme-dark .env-heading {
+    color: #ccd2d9!important;
+}
+
+body, html {
+  height:100%;
+}
+
+.card {
+  overflow:hidden;
+}
+
+body.theme-dark .card-body {
+    background-color: #444;
+}
+
+body.theme-light .card-body {
+    background-color: #f7f7f7;
+}
+
+body.theme-dark .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-light .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.card-body .rotate {
+  z-index: 8;
+  float: right;
+  height: 100%;
+}
+
+.card-body .rotate i {
+  color: #14141426;
+  position: absolute;
+  left: 0;
+  left: auto;
+  right: -10px;
+  bottom: 0;
+  display: block;
+  -webkit-transform: rotate(-44deg);
+  -moz-transform: rotate(-44deg);
+  -o-transform: rotate(-44deg);
+  -ms-transform: rotate(-44deg);
+  transform: rotate(-44deg);
+}
+
+.dyn-height {
+  max-height:350px;
+  overflow-y:auto;
+}
+
+.nav-pills .nav-link.active {
+  background-color: transparent!important;
+}
+
+.backToTop {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 99;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
+
+.single-line-tabs {
+  padding-top: 10px;
+  height: 60px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 0px;
+  bottom: 4px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  box-shadow: 0 0px 15px #2020203d;
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input:checked + .slider {
+  background-color: #4083b6;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4083b6;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+table.dataTable td, table.dataTable tr {
+    vertical-align: middle;
+}
+
+body.theme-dark code {
+    color: #ccd2d8!important;
+}
+
+body.theme-light code {
+    color: #000000!important;
+}
+
+.text-wrap {
+    word-wrap: break-word; 
+    min-width: 600px; 
+    max-width: 600px; 
+    white-space: normal;
+}
+
+</style>
+</head>
+<body class="theme-dark">
+<script>
+    function setTheme(themeName) {
+        localStorage.setItem('theme', themeName);
+        document.body.className = themeName;
+    }
+
+    function toggleTheme() {
+        if (localStorage.getItem('theme') === 'theme-light') {
+            setTheme('theme-dark');
+        } else {
+            setTheme('theme-light');
+        }
+    }
+</script>
+  <div class="container">
+        <div class="container">
+            <label>Light</label>
+            <label id="switch" class="switch">
+                <input type="checkbox" onchange="toggleTheme()" id="slider">
+                <span class="slider round"></span>
+            </label>
+            <label>Dark</label>
+        </div>
+        <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item bg-info active" data-toggle="tooltip" title="Click to view the Summary">
+                <a class="nav-link text-white" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+            </li>
+            <li class="nav-item bg-success" data-toggle="tooltip" title="Click to view the Requests">
+                <a class="nav-link text-white" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Total Requests <span class="badge badge-light">6</span></a>
+            </li>
+            <li class="nav-item bg-danger" data-toggle="tooltip" title="Click to view the Failed Tests">
+                <a class="nav-link text-white" id="pills-failed-tab" data-toggle="pill" href="#pills-failed" role="tab" aria-controls="pills-failed" aria-selected="false">Failed Tests <span class="badge badge-light">0</span></a>
+            </li>
+            <li class="nav-item bg-warning" data-toggle="tooltip" title="Click to view the Skipped Tests">
+                <a class="nav-link text-white" id="pills-skipped-tab" data-toggle="pill" href="#pills-skipped" role="tab" aria-controls="pills-skipped" aria-selected="false">Skipped Tests <span class="badge badge-light">0</span></a>
+            </li>
+            </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-summary" role="tabcard" aria-labelledby="pills-summary-tab">
+<div class="row">
+  <div class="col-md-9 col-lg-12 main">
+   <h1 class="display-2 text-center">Newman Run Dashboard</h1>
+   <h5 class="text-center">Friday, 31 May 2024 21:02:28</h5>
+   <div class="row">
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-success">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-retweet fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Iterations</h6>
+       <h1 class="display-1">1</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-danger">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-list fa-4x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Assertions</h6>
+       <h1 class="display-1">6</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-info">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-plus-circle fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Failed Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-warning">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-share fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Skipped Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+   </div>
+   <hr>
+    <div class="row">
+    <div class="col">
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">File Information</h5>
+                <span><i class="fas fa-file-code"></i></span><strong> Collection:</strong> ListaExerciciosPostman<br>
+                
+                
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">Timings and Data</h5>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Total run duration:</strong> 3.1s<br>
+                <span><i class="fas fa-database"></i></span><strong> Total data received:</strong> 19.84KB<br>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Average response time:</strong> 434ms<br>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-inverse">
+                    <tr class="text-center">
+                        <th class="text-uppercase">Summary Item</th>
+                        <th class="text-uppercase">Total</th>
+                        <th class="text-uppercase">Failed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Requests</td>
+                        <td class="text-center">6</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Prerequest Scripts</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Test Scripts</td>
+                        <td class="text-center">6</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Assertions</td>
+                        <td class="text-center">6</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Skipped Tests</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">-</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    <hr>
+   </div>
+   </div>
+  </div>
+ </div>
+        </div>
+            <div class="tab-pane fade" id="pills-failed" role="tabcard" aria-labelledby="pills-failed-tab">
+                <button id="topOfFailuresScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                     <br><br><h1 class="text-center">There are no failed tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-skipped" role="tabcard" aria-labelledby="pills-skipped-tab">
+                <button id="topOfSkippedScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                    <br><br><h1 class="text-center">There are no skipped tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-requests" role="tabcard" aria-labelledby="pills-requests-tab">
+
+            <button id="topOfRequestsScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+            <div class="btn-group float-right" role="group" aria-label="Button Group">
+                <button id="openAll" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Folders</button>
+                <button id="openAllRequests" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Requests</button>
+            </div>
+
+    <div class="text-uppercase" id="execution-menu">
+        <h5>1 Iteration available to view</h5>
+        
+        <nav class="table-responsive">
+        <ul class="nav single-line-tabs" id="iterationList">
+        </ul>
+        </nav>
+    </div>
+    <h6 class="text-uppercase text-muted" id="iterationSelected" style="padding-top: 10px;"></h6>
+	<div class="tab-content" id="execution-data">
+        <div class="alert alert-dark text-uppercase text-center iteration-0">
+        <a data-toggle="collapse" href="#" data-target="#folder-collapse-03779c63-ae6c-4da8-8b89-c3abe3e958de-iteration-0" aria-expanded="false" aria-controls="collapse" id="folder-03779c63-ae6c-4da8-8b89-c3abe3e958de-iteration-0" class="collapsed text-dark z-block">
+        <i class="fas fa-info-circle float-left resultsInfoPass" ></i>
+            GET - 5 Requests in the folder<i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+        </a>
+        </div>
+        <div id="folder-collapse-03779c63-ae6c-4da8-8b89-c3abe3e958de-iteration-0" class="collapse" aria-labelledby="folder-03779c63-ae6c-4da8-8b89-c3abe3e958de">
+            <div id="folder-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b" aria-expanded="false" aria-controls="collapse" id="requests-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b" class="collapsed text-white z-block">
+                    Iteration: 1 - BuscaLukeSkywalker <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b" class="collapse" aria-labelledby="requests-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://swapi.dev/api/people/1/" target="_blank">https://swapi.dev/api/people/1/</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 1095ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 647B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">8cd77ed9-9d1b-4450-b575-73dc967edcb2</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">swapi.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.16.1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 01 Jun 2024 00:02:26 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Transfer-Encoding</td>
+                                                    <td class="text-wrap">chunked</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">Accept, Cookie</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Frame-Options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">&quot;ee398610435c328f4d0a4e1b0d2f7bbc&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Allow</td>
+                                                    <td class="text-wrap">GET, HEAD, OPTIONS</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Strict-Transport-Security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15768000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-8719b0b4-1619-4c1b-91e3-f706f66aaaca" class="prettyPrint">{&quot;name&quot;:&quot;Luke Skywalker&quot;,&quot;height&quot;:&quot;172&quot;,&quot;mass&quot;:&quot;77&quot;,&quot;hair_color&quot;:&quot;blond&quot;,&quot;skin_color&quot;:&quot;fair&quot;,&quot;eye_color&quot;:&quot;blue&quot;,&quot;birth_year&quot;:&quot;19BBY&quot;,&quot;gender&quot;:&quot;male&quot;,&quot;homeworld&quot;:&quot;https://swapi.dev/api/planets/1/&quot;,&quot;films&quot;:[&quot;https://swapi.dev/api/films/1/&quot;,&quot;https://swapi.dev/api/films/2/&quot;,&quot;https://swapi.dev/api/films/3/&quot;,&quot;https://swapi.dev/api/films/6/&quot;],&quot;species&quot;:[],&quot;vehicles&quot;:[&quot;https://swapi.dev/api/vehicles/14/&quot;,&quot;https://swapi.dev/api/vehicles/30/&quot;],&quot;starships&quot;:[&quot;https://swapi.dev/api/starships/12/&quot;,&quot;https://swapi.dev/api/starships/22/&quot;],&quot;created&quot;:&quot;2014-12-09T13:50:51.644000Z&quot;,&quot;edited&quot;:&quot;2014-12-20T21:17:56.891000Z&quot;,&quot;url&quot;:&quot;https://swapi.dev/api/people/1/&quot;}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-8719b0b4-1619-4c1b-91e3-f706f66aaaca">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-91788816-bc58-4b11-a783-e4c13fe31830" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-91788816-bc58-4b11-a783-e4c13fe31830" aria-expanded="false" aria-controls="collapse" id="requests-91788816-bc58-4b11-a783-e4c13fe31830" class="collapsed text-white z-block">
+                    Iteration: 1 - ListarFilmes <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-91788816-bc58-4b11-a783-e4c13fe31830" class="collapse" aria-labelledby="requests-91788816-bc58-4b11-a783-e4c13fe31830">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://swapi.dev/api/films/" target="_blank">https://swapi.dev/api/films/</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 535ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 18.2KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">2b3142a6-705d-49c4-bf34-3f09ce58e80a</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">swapi.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.16.1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 01 Jun 2024 00:02:26 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Transfer-Encoding</td>
+                                                    <td class="text-wrap">chunked</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">Accept, Cookie</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Frame-Options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">&quot;73dffe18f022f65acc88f914f65f2922&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Allow</td>
+                                                    <td class="text-wrap">GET, HEAD, OPTIONS</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Strict-Transport-Security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15768000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-ea00e48b-8fa7-415c-b32f-28829c9cc105" class="prettyPrint">{&quot;count&quot;:6,&quot;next&quot;:null,&quot;previous&quot;:null,&quot;results&quot;:[{&quot;title&quot;:&quot;A New Hope&quot;,&quot;episode_id&quot;:4,&quot;opening_crawl&quot;:&quot;It is a period of civil war.\r\nRebel spaceships, striking\r\nfrom a hidden base, have won\r\ntheir first victory against\r\nthe evil Galactic Empire.\r\n\r\nDuring the battle, Rebel\r\nspies managed to steal secret\r\nplans to the Empire&#x27;s\r\nultimate weapon, the DEATH\r\nSTAR, an armored space\r\nstation with enough power\r\nto destroy an entire planet.\r\n\r\nPursued by the Empire&#x27;s\r\nsinister agents, Princess\r\nLeia races home aboard her\r\nstarship, custodian of the\r\nstolen plans that can save her\r\npeople and restore\r\nfreedom to the galaxy....&quot;,&quot;director&quot;:&quot;George Lucas&quot;,&quot;producer&quot;:&quot;Gary Kurtz, Rick McCallum&quot;,&quot;release_date&quot;:&quot;1977-05-25&quot;,&quot;characters&quot;:[&quot;https://swapi.dev/api/people/1/&quot;,&quot;https://swapi.dev/api/people/2/&quot;,&quot;https://swapi.dev/api/people/3/&quot;,&quot;https://swapi.dev/api/people/4/&quot;,&quot;https://swapi.dev/api/people/5/&quot;,&quot;https://swapi.dev/api/people/6/&quot;,&quot;https://swapi.dev/api/people/7/&quot;,&quot;https://swapi.dev/api/people/8/&quot;,&quot;https://swapi.dev/api/people/9/&quot;,&quot;https://swapi.dev/api/people/10/&quot;,&quot;https://swapi.dev/api/people/12/&quot;,&quot;https://swapi.dev/api/people/13/&quot;,&quot;https://swapi.dev/api/people/14/&quot;,&quot;https://swapi.dev/api/people/15/&quot;,&quot;https://swapi.dev/api/people/16/&quot;,&quot;https://swapi.dev/api/people/18/&quot;,&quot;https://swapi.dev/api/people/19/&quot;,&quot;https://swapi.dev/api/people/81/&quot;],&quot;planets&quot;:[&quot;https://swapi.dev/api/planets/1/&quot;,&quot;https://swapi.dev/api/planets/2/&quot;,&quot;https://swapi.dev/api/planets/3/&quot;],&quot;starships&quot;:[&quot;https://swapi.dev/api/starships/2/&quot;,&quot;https://swapi.dev/api/starships/3/&quot;,&quot;https://swapi.dev/api/starships/5/&quot;,&quot;https://swapi.dev/api/starships/9/&quot;,&quot;https://swapi.dev/api/starships/10/&quot;,&quot;https://swapi.dev/api/starships/11/&quot;,&quot;https://swapi.dev/api/starships/12/&quot;,&quot;https://swapi.dev/api/starships/13/&quot;],&quot;vehicles&quot;:[&quot;https://swapi.dev/api/vehicles/4/&quot;,&quot;https://swapi.dev/api/vehicles/6/&quot;,&quot;https://swapi.dev/api/vehicles/7/&quot;,&quot;https://swapi.dev/api/vehicles/8/&quot;],&quot;species&quot;:[&quot;https://swapi.dev/api/species/1/&quot;,&quot;https://swapi.dev/api/species/2/&quot;,&quot;https://swapi.dev/api/species/3/&quot;,&quot;https://swapi.dev/api/species/4/&quot;,&quot;https://swapi.dev/api/species/5/&quot;],&quot;created&quot;:&quot;2014-12-10T14:23:31.880000Z&quot;,&quot;edited&quot;:&quot;2014-12-20T19:49:45.256000Z&quot;,&quot;url&quot;:&quot;https://swapi.dev/api/films/1/&quot;},{&quot;title&quot;:&quot;The Empire Strikes Back&quot;,&quot;episode_id&quot;:5,&quot;opening_crawl&quot;:&quot;It is a dark time for the\r\nRebellion. Although the Death\r\nStar has been destroyed,\r\nImperial troops have driven the\r\nRebel forces from their hidden\r\nbase and pursued them across\r\nthe galaxy.\r\n\r\nEvading the dreaded Imperial\r\nStarfleet, a group of freedom\r\nfighters led by Luke Skywalker\r\nhas established a new secret\r\nbase on the remote ice world\r\nof Hoth.\r\n\r\nThe evil lord Darth Vader,\r\nobsessed with finding young\r\nSkywalker, has dispatched\r\nthousands of remote probes into\r\nthe far reaches of space....&quot;,&quot;director&quot;:&quot;Irvin Kershner&quot;,&quot;producer&quot;:&quot;Gary Kurtz, Rick McCallum&quot;,&quot;release_date&quot;:&quot;1980-05-17&quot;,&quot;characters&quot;:[&quot;https://swapi.dev/api/people/1/&quot;,&quot;https://swapi.dev/api/people/2/&quot;,&quot;https://swapi.dev/api/people/3/&quot;,&quot;https://swapi.dev/api/people/4/&quot;,&quot;https://swapi.dev/api/people/5/&quot;,&quot;https://swapi.dev/api/people/10/&quot;,&quot;https://swapi.dev/api/people/13/&quot;,&quot;https://swapi.dev/api/people/14/&quot;,&quot;https://swapi.dev/api/people/18/&quot;,&quot;https://swapi.dev/api/people/20/&quot;,&quot;https://swapi.dev/api/people/21/&quot;,&quot;https://swapi.dev/api/people/22/&quot;,&quot;https://swapi.dev/api/people/23/&quot;,&quot;https://swapi.dev/api/people/24/&quot;,&quot;https://swapi.dev/api/people/25/&quot;,&quot;https://swapi.dev/api/people/26/&quot;],&quot;planets&quot;:[&quot;https://swapi.dev/api/planets/4/&quot;,&quot;https://swapi.dev/api/planets/5/&quot;,&quot;https://swapi.dev/api/planets/6/&quot;,&quot;https://swapi.dev/api/planets/27/&quot;],&quot;starships&quot;:[&quot;https://swapi.dev/api/starships/3/&quot;,&quot;https://swapi.dev/api/starships/10/&quot;,&quot;https://swapi.dev/api/starships/11/&quot;,&quot;https://swapi.dev/api/starships/12/&quot;,&quot;https://swapi.dev/api/starships/15/&quot;,&quot;https://swapi.dev/api/starships/17/&quot;,&quot;https://swapi.dev/api/starships/21/&quot;,&quot;https://swapi.dev/api/starships/22/&quot;,&quot;https://swapi.dev/api/starships/23/&quot;],&quot;vehicles&quot;:[&quot;https://swapi.dev/api/vehicles/8/&quot;,&quot;https://swapi.dev/api/vehicles/14/&quot;,&quot;https://swapi.dev/api/vehicles/16/&quot;,&quot;https://swapi.dev/api/vehicles/18/&quot;,&quot;https://swapi.dev/api/vehicles/19/&quot;,&quot;https://swapi.dev/api/vehicles/20/&quot;],&quot;species&quot;:[&quot;https://swapi.dev/api/species/1/&quot;,&quot;https://swapi.dev/api/species/2/&quot;,&quot;https://swapi.dev/api/species/3/&quot;,&quot;https://swapi.dev/api/species/6/&quot;,&quot;https://swapi.dev/api/species/7/&quot;],&quot;created&quot;:&quot;2014-12-12T11:26:24.656000Z&quot;,&quot;edited&quot;:&quot;2014-12-15T13:07:53.386000Z&quot;,&quot;url&quot;:&quot;https://swapi.dev/api/films/2/&quot;},{&quot;title&quot;:&quot;Return of the Jedi&quot;,&quot;episode_id&quot;:6,&quot;opening_crawl&quot;:&quot;Luke Skywalker has returned to\r\nhis home planet of Tatooine in\r\nan attempt to rescue his\r\nfriend Han Solo from the\r\nclutches of the vile gangster\r\nJabba the Hutt.\r\n\r\nLittle does Luke know that the\r\nGALACTIC EMPIRE has secretly\r\nbegun construction on a new\r\narmored space station even\r\nmore powerful than the first\r\ndreaded Death Star.\r\n\r\nWhen completed, this ultimate\r\nweapon will spell certain doom\r\nfor the small band of rebels\r\nstruggling to restore freedom\r\nto the galaxy...&quot;,&quot;director&quot;:&quot;Richard Marquand&quot;,&quot;producer&quot;:&quot;Howard G. Kazanjian, George Lucas, Rick McCallum&quot;,&quot;release_date&quot;:&quot;1983-05-25&quot;,&quot;characters&quot;:[&quot;https://swapi.dev/api/people/1/&quot;,&quot;https://swapi.dev/api/people/2/&quot;,&quot;https://swapi.dev/api/people/3/&quot;,&quot;https://swapi.dev/api/people/4/&quot;,&quot;https://swapi.dev/api/people/5/&quot;,&quot;https://swapi.dev/api/people/10/&quot;,&quot;https://swapi.dev/api/people/13/&quot;,&quot;https://swapi.dev/api/people/14/&quot;,&quot;https://swapi.dev/api/people/16/&quot;,&quot;https://swapi.dev/api/people/18/&quot;,&quot;https://swapi.dev/api/people/20/&quot;,&quot;https://swapi.dev/api/people/21/&quot;,&quot;https://swapi.dev/api/people/22/&quot;,&quot;https://swapi.dev/api/people/25/&quot;,&quot;https://swapi.dev/api/people/27/&quot;,&quot;https://swapi.dev/api/people/28/&quot;,&quot;https://swapi.dev/api/people/29/&quot;,&quot;https://swapi.dev/api/people/30/&quot;,&quot;https://swapi.dev/api/people/31/&quot;,&quot;https://swapi.dev/api/people/45/&quot;],&quot;planets&quot;:[&quot;https://swapi.dev/api/planets/1/&quot;,&quot;https://swapi.dev/api/planets/5/&quot;,&quot;https://swapi.dev/api/planets/7/&quot;,&quot;https://swapi.dev/api/planets/8/&quot;,&quot;https://swapi.dev/api/planets/9/&quot;],&quot;starships&quot;:[&quot;https://swapi.dev/api/starships/2/&quot;,&quot;https://swapi.dev/api/starships/3/&quot;,&quot;https://swapi.dev/api/starships/10/&quot;,&quot;https://swapi.dev/api/starships/11/&quot;,&quot;https://swapi.dev/api/starships/12/&quot;,&quot;https://swapi.dev/api/starships/15/&quot;,&quot;https://swapi.dev/api/starships/17/&quot;,&quot;https://swapi.dev/api/starships/22/&quot;,&quot;https://swapi.dev/api/starships/23/&quot;,&quot;https://swapi.dev/api/starships/27/&quot;,&quot;https://swapi.dev/api/starships/28/&quot;,&quot;https://swapi.dev/api/starships/29/&quot;],&quot;vehicles&quot;:[&quot;https://swapi.dev/api/vehicles/8/&quot;,&quot;https://swapi.dev/api/vehicles/16/&quot;,&quot;https://swapi.dev/api/vehicles/18/&quot;,&quot;https://swapi.dev/api/vehicles/19/&quot;,&quot;https://swapi.dev/api/vehicles/24/&quot;,&quot;https://swapi.dev/api/vehicles/25/&quot;,&quot;https://swapi.dev/api/vehicles/26/&quot;,&quot;https://swapi.dev/api/vehicles/30/&quot;],&quot;species&quot;:[&quot;https://swapi.dev/api/species/1/&quot;,&quot;https://swapi.dev/api/species/2/&quot;,&quot;https://swapi.dev/api/species/3/&quot;,&quot;https://swapi.dev/api/species/5/&quot;,&quot;https://swapi.dev/api/species/6/&quot;,&quot;https://swapi.dev/api/species/8/&quot;,&quot;https://swapi.dev/api/species/9/&quot;,&quot;https://swapi.dev/api/species/10/&quot;,&quot;https://swapi.dev/api/species/15/&quot;],&quot;created&quot;:&quot;2014-12-18T10:39:33.255000Z&quot;,&quot;edited&quot;:&quot;2014-12-20T09:48:37.462000Z&quot;,&quot;url&quot;:&quot;https://swapi.dev/api/films/3/&quot;},{&quot;title&quot;:&quot;The Phantom Menace&quot;,&quot;episode_id&quot;:1,&quot;opening_crawl&quot;:&quot;Turmoil has engulfed the\r\nGalactic Republic. The taxation\r\nof trade routes to outlying star\r\nsystems is in dispute.\r\n\r\nHoping to resolve the matter\r\nwith a blockade of deadly\r\nbattleships, the greedy Trade\r\nFederation has stopped all\r\nshipping to the small planet\r\nof Naboo.\r\n\r\nWhile the Congress of the\r\nRepublic endlessly debates\r\nthis alarming chain of events,\r\nthe Supreme Chancellor has\r\nsecretly dispatched two Jedi\r\nKnights, the guardians of\r\npeace and justice in the\r\ngalaxy, to settle the conflict....&quot;,&quot;director&quot;:&quot;George Lucas&quot;,&quot;producer&quot;:&quot;Rick McCallum&quot;,&quot;release_date&quot;:&quot;1999-05-19&quot;,&quot;characters&quot;:[&quot;https://swapi.dev/api/people/2/&quot;,&quot;https://swapi.dev/api/people/3/&quot;,&quot;https://swapi.dev/api/people/10/&quot;,&quot;https://swapi.dev/api/people/11/&quot;,&quot;https://swapi.dev/api/people/16/&quot;,&quot;https://swapi.dev/api/people/20/&quot;,&quot;https://swapi.dev/api/people/21/&quot;,&quot;https://swapi.dev/api/people/32/&quot;,&quot;https://swapi.dev/api/people/33/&quot;,&quot;https://swapi.dev/api/people/34/&quot;,&quot;https://swapi.dev/api/people/35/&quot;,&quot;https://swapi.dev/api/people/36/&quot;,&quot;https://swapi.dev/api/people/37/&quot;,&quot;https://swapi.dev/api/people/38/&quot;,&quot;https://swapi.dev/api/people/39/&quot;,&quot;https://swapi.dev/api/people/40/&quot;,&quot;https://swapi.dev/api/people/41/&quot;,&quot;https://swapi.dev/api/people/42/&quot;,&quot;https://swapi.dev/api/people/43/&quot;,&quot;https://swapi.dev/api/people/44/&quot;,&quot;https://swapi.dev/api/people/46/&quot;,&quot;https://swapi.dev/api/people/47/&quot;,&quot;https://swapi.dev/api/people/48/&quot;,&quot;https://swapi.dev/api/people/49/&quot;,&quot;https://swapi.dev/api/people/50/&quot;,&quot;https://swapi.dev/api/people/51/&quot;,&quot;https://swapi.dev/api/people/52/&quot;,&quot;https://swapi.dev/api/people/53/&quot;,&quot;https://swapi.dev/api/people/54/&quot;,&quot;https://swapi.dev/api/people/55/&quot;,&quot;https://swapi.dev/api/people/56/&quot;,&quot;https://swapi.dev/api/people/57/&quot;,&quot;https://swapi.dev/api/people/58/&quot;,&quot;https://swapi.dev/api/people/59/&quot;],&quot;planets&quot;:[&quot;https://swapi.dev/api/planets/1/&quot;,&quot;https://swapi.dev/api/planets/8/&quot;,&quot;https://swapi.dev/api/planets/9/&quot;],&quot;starships&quot;:[&quot;https://swapi.dev/api/starships/31/&quot;,&quot;https://swapi.dev/api/starships/32/&quot;,&quot;https://swapi.dev/api/starships/39/&quot;,&quot;https://swapi.dev/api/starships/40/&quot;,&quot;https://swapi.dev/api/starships/41/&quot;],&quot;vehicles&quot;:[&quot;https://swapi.dev/api/vehicles/33/&quot;,&quot;https://swapi.dev/api/vehicles/34/&quot;,&quot;https://swapi.dev/api/vehicles/35/&quot;,&quot;https://swapi.dev/api/vehicles/36/&quot;,&quot;https://swapi.dev/api/vehicles/37/&quot;,&quot;https://swapi.dev/api/vehicles/38/&quot;,&quot;https://swapi.dev/api/vehicles/42/&quot;],&quot;species&quot;:[&quot;https://swapi.dev/api/species/1/&quot;,&quot;https://swapi.dev/api/species/2/&quot;,&quot;https://swapi.dev/api/species/6/&quot;,&quot;https://swapi.dev/api/species/11/&quot;,&quot;https://swapi.dev/api/species/12/&quot;,&quot;https://swapi.dev/api/species/13/&quot;,&quot;https://swapi.dev/api/species/14/&quot;,&quot;https://swapi.dev/api/species/15/&quot;,&quot;https://swapi.dev/api/species/16/&quot;,&quot;https://swapi.dev/api/species/17/&quot;,&quot;https://swapi.dev/api/species/18/&quot;,&quot;https://swapi.dev/api/species/19/&quot;,&quot;https://swapi.dev/api/species/20/&quot;,&quot;https://swapi.dev/api/species/21/&quot;,&quot;https://swapi.dev/api/species/22/&quot;,&quot;https://swapi.dev/api/species/23/&quot;,&quot;https://swapi.dev/api/species/24/&quot;,&quot;https://swapi.dev/api/species/25/&quot;,&quot;https://swapi.dev/api/species/26/&quot;,&quot;https://swapi.dev/api/species/27/&quot;],&quot;created&quot;:&quot;2014-12-19T16:52:55.740000Z&quot;,&quot;edited&quot;:&quot;2014-12-20T10:54:07.216000Z&quot;,&quot;url&quot;:&quot;https://swapi.dev/api/films/4/&quot;},{&quot;title&quot;:&quot;Attack of the Clones&quot;,&quot;episode_id&quot;:2,&quot;opening_crawl&quot;:&quot;There is unrest in the Galactic\r\nSenate. Several thousand solar\r\nsystems have declared their\r\nintentions to leave the Republic.\r\n\r\nThis separatist movement,\r\nunder the leadership of the\r\nmysterious Count Dooku, has\r\nmade it difficult for the limited\r\nnumber of Jedi Knights to maintain \r\npeace and order in the galaxy.\r\n\r\nSenator Amidala, the former\r\nQueen of Naboo, is returning\r\nto the Galactic Senate to vote\r\non the critical issue of creating\r\nan ARMY OF THE REPUBLIC\r\nto assist the overwhelmed\r\nJedi....&quot;,&quot;director&quot;:&quot;George Lucas&quot;,&quot;producer&quot;:&quot;Rick McCallum&quot;,&quot;release_date&quot;:&quot;2002-05-16&quot;,&quot;characters&quot;:[&quot;https://swapi.dev/api/people/2/&quot;,&quot;https://swapi.dev/api/people/3/&quot;,&quot;https://swapi.dev/api/people/6/&quot;,&quot;https://swapi.dev/api/people/7/&quot;,&quot;https://swapi.dev/api/people/10/&quot;,&quot;https://swapi.dev/api/people/11/&quot;,&quot;https://swapi.dev/api/people/20/&quot;,&quot;https://swapi.dev/api/people/21/&quot;,&quot;https://swapi.dev/api/people/22/&quot;,&quot;https://swapi.dev/api/people/33/&quot;,&quot;https://swapi.dev/api/people/35/&quot;,&quot;https://swapi.dev/api/people/36/&quot;,&quot;https://swapi.dev/api/people/40/&quot;,&quot;https://swapi.dev/api/people/43/&quot;,&quot;https://swapi.dev/api/people/46/&quot;,&quot;https://swapi.dev/api/people/51/&quot;,&quot;https://swapi.dev/api/people/52/&quot;,&quot;https://swapi.dev/api/people/53/&quot;,&quot;https://swapi.dev/api/people/58/&quot;,&quot;https://swapi.dev/api/people/59/&quot;,&quot;https://swapi.dev/api/people/60/&quot;,&quot;https://swapi.dev/api/people/61/&quot;,&quot;https://swapi.dev/api/people/62/&quot;,&quot;https://swapi.dev/api/people/63/&quot;,&quot;https://swapi.dev/api/people/64/&quot;,&quot;https://swapi.dev/api/people/65/&quot;,&quot;https://swapi.dev/api/people/66/&quot;,&quot;https://swapi.dev/api/people/67/&quot;,&quot;https://swapi.dev/api/people/68/&quot;,&quot;https://swapi.dev/api/people/69/&quot;,&quot;https://swapi.dev/api/people/70/&quot;,&quot;https://swapi.dev/api/people/71/&quot;,&quot;https://swapi.dev/api/people/72/&quot;,&quot;https://swapi.dev/api/people/73/&quot;,&quot;https://swapi.dev/api/people/74/&quot;,&quot;https://swapi.dev/api/people/75/&quot;,&quot;https://swapi.dev/api/people/76/&quot;,&quot;https://swapi.dev/api/people/77/&quot;,&quot;https://swapi.dev/api/people/78/&quot;,&quot;https://swapi.dev/api/people/82/&quot;],&quot;planets&quot;:[&quot;https://swapi.dev/api/planets/1/&quot;,&quot;https://swapi.dev/api/planets/8/&quot;,&quot;https://swapi.dev/api/planets/9/&quot;,&quot;https://swapi.dev/api/planets/10/&quot;,&quot;https://swapi.dev/api/planets/11/&quot;],&quot;starships&quot;:[&quot;https://swapi.dev/api/starships/21/&quot;,&quot;https://swapi.dev/api/starships/32/&quot;,&quot;https://swapi.dev/api/starships/39/&quot;,&quot;https://swapi.dev/api/starships/43/&quot;,&quot;https://swapi.dev/api/starships/47/&quot;,&quot;https://swapi.dev/api/starships/48/&quot;,&quot;https://swapi.dev/api/starships/49/&quot;,&quot;https://swapi.dev/api/starships/52/&quot;,&quot;https://swapi.dev/api/starships/58/&quot;],&quot;vehicles&quot;:[&quot;https://swapi.dev/api/vehicles/4/&quot;,&quot;https://swapi.dev/api/vehicles/44/&quot;,&quot;https://swapi.dev/api/vehicles/45/&quot;,&quot;https://swapi.dev/api/vehicles/46/&quot;,&quot;https://swapi.dev/api/vehicles/50/&quot;,&quot;https://swapi.dev/api/vehicles/51/&quot;,&quot;https://swapi.dev/api/vehicles/53/&quot;,&quot;https://swapi.dev/api/vehicles/54/&quot;,&quot;https://swapi.dev/api/vehicles/55/&quot;,&quot;https://swapi.dev/api/vehicles/56/&quot;,&quot;https://swapi.dev/api/vehicles/57/&quot;],&quot;species&quot;:[&quot;https://swapi.dev/api/species/1/&quot;,&quot;https://swapi.dev/api/species/2/&quot;,&quot;https://swapi.dev/api/species/6/&quot;,&quot;https://swapi.dev/api/species/12/&quot;,&quot;https://swapi.dev/api/species/13/&quot;,&quot;https://swapi.dev/api/species/15/&quot;,&quot;https://swapi.dev/api/species/28/&quot;,&quot;https://swapi.dev/api/species/29/&quot;,&quot;https://swapi.dev/api/species/30/&quot;,&quot;https://swapi.dev/api/species/31/&quot;,&quot;https://swapi.dev/api/species/32/&quot;,&quot;https://swapi.dev/api/species/33/&quot;,&quot;https://swapi.dev/api/species/34/&quot;,&quot;https://swapi.dev/api/species/35/&quot;],&quot;created&quot;:&quot;2014-12-20T10:57:57.886000Z&quot;,&quot;edited&quot;:&quot;2014-12-20T20:18:48.516000Z&quot;,&quot;url&quot;:&quot;https://swapi.dev/api/films/5/&quot;},{&quot;title&quot;:&quot;Revenge of the Sith&quot;,&quot;episode_id&quot;:3,&quot;opening_crawl&quot;:&quot;War! The Republic is crumbling\r\nunder attacks by the ruthless\r\nSith Lord, Count Dooku.\r\nThere are heroes on both sides.\r\nEvil is everywhere.\r\n\r\nIn a stunning move, the\r\nfiendish droid leader, General\r\nGrievous, has swept into the\r\nRepublic capital and kidnapped\r\nChancellor Palpatine, leader of\r\nthe Galactic Senate.\r\n\r\nAs the Separatist Droid Army\r\nattempts to flee the besieged\r\ncapital with their valuable\r\nhostage, two Jedi Knights lead a\r\ndesperate mission to rescue the\r\ncaptive Chancellor....&quot;,&quot;director&quot;:&quot;George Lucas&quot;,&quot;producer&quot;:&quot;Rick McCallum&quot;,&quot;release_date&quot;:&quot;2005-05-19&quot;,&quot;characters&quot;:[&quot;https://swapi.dev/api/people/1/&quot;,&quot;https://swapi.dev/api/people/2/&quot;,&quot;https://swapi.dev/api/people/3/&quot;,&quot;https://swapi.dev/api/people/4/&quot;,&quot;https://swapi.dev/api/people/5/&quot;,&quot;https://swapi.dev/api/people/6/&quot;,&quot;https://swapi.dev/api/people/7/&quot;,&quot;https://swapi.dev/api/people/10/&quot;,&quot;https://swapi.dev/api/people/11/&quot;,&quot;https://swapi.dev/api/people/12/&quot;,&quot;https://swapi.dev/api/people/13/&quot;,&quot;https://swapi.dev/api/people/20/&quot;,&quot;https://swapi.dev/api/people/21/&quot;,&quot;https://swapi.dev/api/people/33/&quot;,&quot;https://swapi.dev/api/people/35/&quot;,&quot;https://swapi.dev/api/people/46/&quot;,&quot;https://swapi.dev/api/people/51/&quot;,&quot;https://swapi.dev/api/people/52/&quot;,&quot;https://swapi.dev/api/people/53/&quot;,&quot;https://swapi.dev/api/people/54/&quot;,&quot;https://swapi.dev/api/people/55/&quot;,&quot;https://swapi.dev/api/people/56/&quot;,&quot;https://swapi.dev/api/people/58/&quot;,&quot;https://swapi.dev/api/people/63/&quot;,&quot;https://swapi.dev/api/people/64/&quot;,&quot;https://swapi.dev/api/people/67/&quot;,&quot;https://swapi.dev/api/people/68/&quot;,&quot;https://swapi.dev/api/people/75/&quot;,&quot;https://swapi.dev/api/people/78/&quot;,&quot;https://swapi.dev/api/people/79/&quot;,&quot;https://swapi.dev/api/people/80/&quot;,&quot;https://swapi.dev/api/people/81/&quot;,&quot;https://swapi.dev/api/people/82/&quot;,&quot;https://swapi.dev/api/people/83/&quot;],&quot;planets&quot;:[&quot;https://swapi.dev/api/planets/1/&quot;,&quot;https://swapi.dev/api/planets/2/&quot;,&quot;https://swapi.dev/api/planets/5/&quot;,&quot;https://swapi.dev/api/planets/8/&quot;,&quot;https://swapi.dev/api/planets/9/&quot;,&quot;https://swapi.dev/api/planets/12/&quot;,&quot;https://swapi.dev/api/planets/13/&quot;,&quot;https://swapi.dev/api/planets/14/&quot;,&quot;https://swapi.dev/api/planets/15/&quot;,&quot;https://swapi.dev/api/planets/16/&quot;,&quot;https://swapi.dev/api/planets/17/&quot;,&quot;https://swapi.dev/api/planets/18/&quot;,&quot;https://swapi.dev/api/planets/19/&quot;],&quot;starships&quot;:[&quot;https://swapi.dev/api/starships/2/&quot;,&quot;https://swapi.dev/api/starships/32/&quot;,&quot;https://swapi.dev/api/starships/48/&quot;,&quot;https://swapi.dev/api/starships/59/&quot;,&quot;https://swapi.dev/api/starships/61/&quot;,&quot;https://swapi.dev/api/starships/63/&quot;,&quot;https://swapi.dev/api/starships/64/&quot;,&quot;https://swapi.dev/api/starships/65/&quot;,&quot;https://swapi.dev/api/starships/66/&quot;,&quot;https://swapi.dev/api/starships/68/&quot;,&quot;https://swapi.dev/api/starships/74/&quot;,&quot;https://swapi.dev/api/starships/75/&quot;],&quot;vehicles&quot;:[&quot;https://swapi.dev/api/vehicles/33/&quot;,&quot;https://swapi.dev/api/vehicles/50/&quot;,&quot;https://swapi.dev/api/vehicles/53/&quot;,&quot;https://swapi.dev/api/vehicles/56/&quot;,&quot;https://swapi.dev/api/vehicles/60/&quot;,&quot;https://swapi.dev/api/vehicles/62/&quot;,&quot;https://swapi.dev/api/vehicles/67/&quot;,&quot;https://swapi.dev/api/vehicles/69/&quot;,&quot;https://swapi.dev/api/vehicles/70/&quot;,&quot;https://swapi.dev/api/vehicles/71/&quot;,&quot;https://swapi.dev/api/vehicles/72/&quot;,&quot;https://swapi.dev/api/vehicles/73/&quot;,&quot;https://swapi.dev/api/vehicles/76/&quot;],&quot;species&quot;:[&quot;https://swapi.dev/api/species/1/&quot;,&quot;https://swapi.dev/api/species/2/&quot;,&quot;https://swapi.dev/api/species/3/&quot;,&quot;https://swapi.dev/api/species/6/&quot;,&quot;https://swapi.dev/api/species/15/&quot;,&quot;https://swapi.dev/api/species/19/&quot;,&quot;https://swapi.dev/api/species/20/&quot;,&quot;https://swapi.dev/api/species/23/&quot;,&quot;https://swapi.dev/api/species/24/&quot;,&quot;https://swapi.dev/api/species/25/&quot;,&quot;https://swapi.dev/api/species/26/&quot;,&quot;https://swapi.dev/api/species/27/&quot;,&quot;https://swapi.dev/api/species/28/&quot;,&quot;https://swapi.dev/api/species/29/&quot;,&quot;https://swapi.dev/api/species/30/&quot;,&quot;https://swapi.dev/api/species/33/&quot;,&quot;https://swapi.dev/api/species/34/&quot;,&quot;https://swapi.dev/api/species/35/&quot;,&quot;https://swapi.dev/api/species/36/&quot;,&quot;https://swapi.dev/api/species/37/&quot;],&quot;created&quot;:&quot;2014-12-20T18:49:38.403000Z&quot;,&quot;edited&quot;:&quot;2014-12-20T20:47:52.073000Z&quot;,&quot;url&quot;:&quot;https://swapi.dev/api/films/6/&quot;}]}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-ea00e48b-8fa7-415c-b32f-28829c9cc105">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-e38f1ed2-da98-4f2e-bcc3-73007813f08c" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c" aria-expanded="false" aria-controls="collapse" id="requests-e38f1ed2-da98-4f2e-bcc3-73007813f08c" class="collapsed text-white z-block">
+                    Iteration: 1 - BuscaDeathStar <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c" class="collapse" aria-labelledby="requests-e38f1ed2-da98-4f2e-bcc3-73007813f08c">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://swapi.dev/api/starships/9/" target="_blank">https://swapi.dev/api/starships/9/</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 239ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 585B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">179c1b2c-89dd-445b-825c-d9a88a13d1a4</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">swapi.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.16.1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 01 Jun 2024 00:02:27 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Transfer-Encoding</td>
+                                                    <td class="text-wrap">chunked</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">Accept, Cookie</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Frame-Options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">&quot;058c95fce38484128f1c3f2e5dd04d50&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Allow</td>
+                                                    <td class="text-wrap">GET, HEAD, OPTIONS</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Strict-Transport-Security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15768000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-4ccd738c-dd3e-47e6-a4ce-5969e7a88925" class="prettyPrint">{&quot;name&quot;:&quot;Death Star&quot;,&quot;model&quot;:&quot;DS-1 Orbital Battle Station&quot;,&quot;manufacturer&quot;:&quot;Imperial Department of Military Research, Sienar Fleet Systems&quot;,&quot;cost_in_credits&quot;:&quot;1000000000000&quot;,&quot;length&quot;:&quot;120000&quot;,&quot;max_atmosphering_speed&quot;:&quot;n/a&quot;,&quot;crew&quot;:&quot;342,953&quot;,&quot;passengers&quot;:&quot;843,342&quot;,&quot;cargo_capacity&quot;:&quot;1000000000000&quot;,&quot;consumables&quot;:&quot;3 years&quot;,&quot;hyperdrive_rating&quot;:&quot;4.0&quot;,&quot;MGLT&quot;:&quot;10&quot;,&quot;starship_class&quot;:&quot;Deep Space Mobile Battlestation&quot;,&quot;pilots&quot;:[],&quot;films&quot;:[&quot;https://swapi.dev/api/films/1/&quot;],&quot;created&quot;:&quot;2014-12-10T16:36:50.509000Z&quot;,&quot;edited&quot;:&quot;2014-12-20T21:26:24.783000Z&quot;,&quot;url&quot;:&quot;https://swapi.dev/api/starships/9/&quot;}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-4ccd738c-dd3e-47e6-a4ce-5969e7a88925">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-f92606ef-ebcc-46b6-b1a6-33e4c2067698" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698" aria-expanded="false" aria-controls="collapse" id="requests-f92606ef-ebcc-46b6-b1a6-33e4c2067698" class="collapsed text-white z-block">
+                    Iteration: 1 - PersonagemInexistente(negativo) <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698" class="collapse" aria-labelledby="requests-f92606ef-ebcc-46b6-b1a6-33e4c2067698">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://swapi.dev/api/people/0/" target="_blank">https://swapi.dev/api/people/0/</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 404 - NOT FOUND</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 234ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 22B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">d04e51f3-94b5-4940-b822-0aa0c95ba37d</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">swapi.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.16.1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 01 Jun 2024 00:02:27 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Transfer-Encoding</td>
+                                                    <td class="text-wrap">chunked</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">Accept, Cookie</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Frame-Options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">&quot;8bee5c3ad44d6c57f19e49e8e76ee09e&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Allow</td>
+                                                    <td class="text-wrap">GET, HEAD, OPTIONS</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-c836ab70-99b2-4f46-b572-6f56be4e7422" class="prettyPrint">{&quot;detail&quot;:&quot;Not found&quot;}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-c836ab70-99b2-4f46-b572-6f56be4e7422">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Status code is 404</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-1c4a5889-e94c-430a-9faa-13206e61e208" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-1c4a5889-e94c-430a-9faa-13206e61e208" aria-expanded="false" aria-controls="collapse" id="requests-1c4a5889-e94c-430a-9faa-13206e61e208" class="collapsed text-white z-block">
+                    Iteration: 1 - BuscaYavinIV <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-1c4a5889-e94c-430a-9faa-13206e61e208" class="collapse" aria-labelledby="requests-1c4a5889-e94c-430a-9faa-13206e61e208">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://swapi.dev/api/planets/3/" target="_blank">https://swapi.dev/api/planets/3/</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 267ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 390B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">22f597a5-c87e-49b0-85fd-7eb781702b1f</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">swapi.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.16.1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 01 Jun 2024 00:02:27 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Transfer-Encoding</td>
+                                                    <td class="text-wrap">chunked</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">Accept, Cookie</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Frame-Options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">&quot;ccbca9ad5dbcc6c73413df0765660c26&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Allow</td>
+                                                    <td class="text-wrap">GET, HEAD, OPTIONS</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Strict-Transport-Security</td>
+                                                    <td class="text-wrap">max-age&#x3D;15768000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-05ace97b-ead4-4e48-8825-2056c53d1955" class="prettyPrint">{&quot;name&quot;:&quot;Yavin IV&quot;,&quot;rotation_period&quot;:&quot;24&quot;,&quot;orbital_period&quot;:&quot;4818&quot;,&quot;diameter&quot;:&quot;10200&quot;,&quot;climate&quot;:&quot;temperate, tropical&quot;,&quot;gravity&quot;:&quot;1 standard&quot;,&quot;terrain&quot;:&quot;jungle, rainforests&quot;,&quot;surface_water&quot;:&quot;8&quot;,&quot;population&quot;:&quot;1000&quot;,&quot;residents&quot;:[],&quot;films&quot;:[&quot;https://swapi.dev/api/films/1/&quot;],&quot;created&quot;:&quot;2014-12-10T11:37:19.144000Z&quot;,&quot;edited&quot;:&quot;2014-12-20T20:58:18.421000Z&quot;,&quot;url&quot;:&quot;https://swapi.dev/api/planets/3/&quot;}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-05ace97b-ead4-4e48-8825-2056c53d1955">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="alert alert-dark text-uppercase text-center iteration-0">
+        <a data-toggle="collapse" href="#" data-target="#folder-collapse-aa3eac06-bddd-4892-a3af-1700bee90d58-iteration-0" aria-expanded="false" aria-controls="collapse" id="folder-aa3eac06-bddd-4892-a3af-1700bee90d58-iteration-0" class="collapsed text-dark z-block">
+        <i class="fas fa-info-circle float-left resultsInfoPass" ></i>
+            POST - 1 Request in the folder<i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+        </a>
+        </div>
+        <div id="folder-collapse-aa3eac06-bddd-4892-a3af-1700bee90d58-iteration-0" class="collapse" aria-labelledby="folder-aa3eac06-bddd-4892-a3af-1700bee90d58">
+            <div id="folder-7b475d24-053a-4708-9d0a-ade0e88af6e0" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0" aria-expanded="false" aria-controls="collapse" id="requests-7b475d24-053a-4708-9d0a-ade0e88af6e0" class="collapsed text-white z-block">
+                    Iteration: 1 - MétodoPostNaoPermitido(negativo) <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0" class="collapse" aria-labelledby="requests-7b475d24-053a-4708-9d0a-ade0e88af6e0">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> POST</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://swapi.dev/api/planets/1/" target="_blank">https://swapi.dev/api/planets/1/</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 405 - METHOD NOT ALLOWED</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 234ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 39B</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.37.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">9467c148-83cb-4735-877c-4273b2df98d9</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">swapi.dev</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Content-Length</td>
+                                                        <td class="text-wrap">0</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">nginx/1.16.1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 01 Jun 2024 00:02:28 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Transfer-Encoding</td>
+                                                    <td class="text-wrap">chunked</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">Accept, Cookie</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Frame-Options</td>
+                                                    <td class="text-wrap">SAMEORIGIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">&quot;06617ed6e3d11ac4083b49588eb38c86&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Allow</td>
+                                                    <td class="text-wrap">GET, HEAD, OPTIONS</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-cb92701a-b99f-47f3-bf97-6c4ce0f90ec8" class="prettyPrint">{&quot;detail&quot;:&quot;Method &#x27;POST&#x27; not allowed.&quot;}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-cb92701a-b99f-47f3-bf97-6c4ce0f90ec8">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Status code is 405</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- Set slider initial position depending on the localstorage state -->
+
+<script>
+(function () {
+  var sliderChecked = true;
+  if (localStorage.getItem('theme') === 'theme-light') {
+    setTheme('theme-light');
+    sliderChecked = false;
+  } else {
+    setTheme('theme-dark');
+    sliderChecked = true;
+  }
+  $(document).ready( function () {
+    document.getElementById('slider').checked = sliderChecked;
+  });
+})();
+</script>
+
+<!-- Data Table Configuration -->
+
+<script>
+$(document).ready( function () {
+    $('.datatable').DataTable({
+        "retrieve": true,
+        "paging": false,
+        "info": false,
+        "fixedColumns":   {
+            "heightMatch": 'none'
+        }
+    });
+});
+</script>
+
+<!-- Tooltip Configuration -->
+
+<script>
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger : 'hover'
+    })
+})
+</script>
+
+<!-- Show/Hide The Folders -->
+
+<script>
+$('#openAll').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#folder-03779c63-ae6c-4da8-8b89-c3abe3e958de-iteration-0').removeClass('collapsed')
+            $('#folder-collapse-03779c63-ae6c-4da8-8b89-c3abe3e958de-iteration-0').addClass('show')
+            $('#folder-aa3eac06-bddd-4892-a3af-1700bee90d58-iteration-0').removeClass('collapsed')
+            $('#folder-collapse-aa3eac06-bddd-4892-a3af-1700bee90d58-iteration-0').addClass('show')
+        $('#openAll').html("Collapse Folders");
+        break;
+    case 2:
+            $('#folder-03779c63-ae6c-4da8-8b89-c3abe3e958de-iteration-0').addClass('collapsed')
+            $('#folder-collapse-03779c63-ae6c-4da8-8b89-c3abe3e958de-iteration-0').removeClass('show')
+            $('#folder-aa3eac06-bddd-4892-a3af-1700bee90d58-iteration-0').addClass('collapsed')
+            $('#folder-collapse-aa3eac06-bddd-4892-a3af-1700bee90d58-iteration-0').removeClass('show')
+        $('#openAll').html("Expand Folders");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Requests -->
+
+<script>
+$('#openAllRequests').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#requests-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').removeClass('collapsed')
+            $('#collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').removeClass('collapsed')
+            $('#requests-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').addClass('show')
+            $('#collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').addClass('show')
+            $('#requests-91788816-bc58-4b11-a783-e4c13fe31830').removeClass('collapsed')
+            $('#collapse-91788816-bc58-4b11-a783-e4c13fe31830').removeClass('collapsed')
+            $('#requests-91788816-bc58-4b11-a783-e4c13fe31830').addClass('show')
+            $('#collapse-91788816-bc58-4b11-a783-e4c13fe31830').addClass('show')
+            $('#requests-e38f1ed2-da98-4f2e-bcc3-73007813f08c').removeClass('collapsed')
+            $('#collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c').removeClass('collapsed')
+            $('#requests-e38f1ed2-da98-4f2e-bcc3-73007813f08c').addClass('show')
+            $('#collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c').addClass('show')
+            $('#requests-f92606ef-ebcc-46b6-b1a6-33e4c2067698').removeClass('collapsed')
+            $('#collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698').removeClass('collapsed')
+            $('#requests-f92606ef-ebcc-46b6-b1a6-33e4c2067698').addClass('show')
+            $('#collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698').addClass('show')
+            $('#requests-1c4a5889-e94c-430a-9faa-13206e61e208').removeClass('collapsed')
+            $('#collapse-1c4a5889-e94c-430a-9faa-13206e61e208').removeClass('collapsed')
+            $('#requests-1c4a5889-e94c-430a-9faa-13206e61e208').addClass('show')
+            $('#collapse-1c4a5889-e94c-430a-9faa-13206e61e208').addClass('show')
+            $('#requests-7b475d24-053a-4708-9d0a-ade0e88af6e0').removeClass('collapsed')
+            $('#collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0').removeClass('collapsed')
+            $('#requests-7b475d24-053a-4708-9d0a-ade0e88af6e0').addClass('show')
+            $('#collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0').addClass('show')
+        $('#openAllRequests').html("Collapse Requests");
+        break;
+    case 2:
+            $('#requests-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').addClass('collapsed')
+            $('#collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').addClass('collapsed')
+            $('#requests-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').removeClass('show')
+            $('#collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').removeClass('show')
+            $('#requests-91788816-bc58-4b11-a783-e4c13fe31830').addClass('collapsed')
+            $('#collapse-91788816-bc58-4b11-a783-e4c13fe31830').addClass('collapsed')
+            $('#requests-91788816-bc58-4b11-a783-e4c13fe31830').removeClass('show')
+            $('#collapse-91788816-bc58-4b11-a783-e4c13fe31830').removeClass('show')
+            $('#requests-e38f1ed2-da98-4f2e-bcc3-73007813f08c').addClass('collapsed')
+            $('#collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c').addClass('collapsed')
+            $('#requests-e38f1ed2-da98-4f2e-bcc3-73007813f08c').removeClass('show')
+            $('#collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c').removeClass('show')
+            $('#requests-f92606ef-ebcc-46b6-b1a6-33e4c2067698').addClass('collapsed')
+            $('#collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698').addClass('collapsed')
+            $('#requests-f92606ef-ebcc-46b6-b1a6-33e4c2067698').removeClass('show')
+            $('#collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698').removeClass('show')
+            $('#requests-1c4a5889-e94c-430a-9faa-13206e61e208').addClass('collapsed')
+            $('#collapse-1c4a5889-e94c-430a-9faa-13206e61e208').addClass('collapsed')
+            $('#requests-1c4a5889-e94c-430a-9faa-13206e61e208').removeClass('show')
+            $('#collapse-1c4a5889-e94c-430a-9faa-13206e61e208').removeClass('show')
+            $('#requests-7b475d24-053a-4708-9d0a-ade0e88af6e0').addClass('collapsed')
+            $('#collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0').addClass('collapsed')
+            $('#requests-7b475d24-053a-4708-9d0a-ade0e88af6e0').removeClass('show')
+            $('#collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0').removeClass('show')
+        $('#openAllRequests').html("Expand Requests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Skipped Tests -->
+
+<script>
+$('#openAllSkipped').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#skipped-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').removeClass('collapsed')
+            $('#skipped-collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').removeClass('collapsed')
+            $('#skipped-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').addClass('show')
+            $('#skipped-collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').addClass('show')
+            $('#skipped-91788816-bc58-4b11-a783-e4c13fe31830').removeClass('collapsed')
+            $('#skipped-collapse-91788816-bc58-4b11-a783-e4c13fe31830').removeClass('collapsed')
+            $('#skipped-91788816-bc58-4b11-a783-e4c13fe31830').addClass('show')
+            $('#skipped-collapse-91788816-bc58-4b11-a783-e4c13fe31830').addClass('show')
+            $('#skipped-e38f1ed2-da98-4f2e-bcc3-73007813f08c').removeClass('collapsed')
+            $('#skipped-collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c').removeClass('collapsed')
+            $('#skipped-e38f1ed2-da98-4f2e-bcc3-73007813f08c').addClass('show')
+            $('#skipped-collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c').addClass('show')
+            $('#skipped-f92606ef-ebcc-46b6-b1a6-33e4c2067698').removeClass('collapsed')
+            $('#skipped-collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698').removeClass('collapsed')
+            $('#skipped-f92606ef-ebcc-46b6-b1a6-33e4c2067698').addClass('show')
+            $('#skipped-collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698').addClass('show')
+            $('#skipped-1c4a5889-e94c-430a-9faa-13206e61e208').removeClass('collapsed')
+            $('#skipped-collapse-1c4a5889-e94c-430a-9faa-13206e61e208').removeClass('collapsed')
+            $('#skipped-1c4a5889-e94c-430a-9faa-13206e61e208').addClass('show')
+            $('#skipped-collapse-1c4a5889-e94c-430a-9faa-13206e61e208').addClass('show')
+            $('#skipped-7b475d24-053a-4708-9d0a-ade0e88af6e0').removeClass('collapsed')
+            $('#skipped-collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0').removeClass('collapsed')
+            $('#skipped-7b475d24-053a-4708-9d0a-ade0e88af6e0').addClass('show')
+            $('#skipped-collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0').addClass('show')
+        $('#openAllSkipped').html("Collapse All Skipped Tests");
+        break;
+    case 2:
+            $('#skipped-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').addClass('collapsed')
+            $('#skipped-collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').addClass('collapsed')
+            $('#skipped-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').removeClass('show')
+            $('#skipped-collapse-7ab41dc6-afb8-4cb4-849d-b59b69a48b7b').removeClass('show')
+            $('#skipped-91788816-bc58-4b11-a783-e4c13fe31830').addClass('collapsed')
+            $('#skipped-collapse-91788816-bc58-4b11-a783-e4c13fe31830').addClass('collapsed')
+            $('#skipped-91788816-bc58-4b11-a783-e4c13fe31830').removeClass('show')
+            $('#skipped-collapse-91788816-bc58-4b11-a783-e4c13fe31830').removeClass('show')
+            $('#skipped-e38f1ed2-da98-4f2e-bcc3-73007813f08c').addClass('collapsed')
+            $('#skipped-collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c').addClass('collapsed')
+            $('#skipped-e38f1ed2-da98-4f2e-bcc3-73007813f08c').removeClass('show')
+            $('#skipped-collapse-e38f1ed2-da98-4f2e-bcc3-73007813f08c').removeClass('show')
+            $('#skipped-f92606ef-ebcc-46b6-b1a6-33e4c2067698').addClass('collapsed')
+            $('#skipped-collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698').addClass('collapsed')
+            $('#skipped-f92606ef-ebcc-46b6-b1a6-33e4c2067698').removeClass('show')
+            $('#skipped-collapse-f92606ef-ebcc-46b6-b1a6-33e4c2067698').removeClass('show')
+            $('#skipped-1c4a5889-e94c-430a-9faa-13206e61e208').addClass('collapsed')
+            $('#skipped-collapse-1c4a5889-e94c-430a-9faa-13206e61e208').addClass('collapsed')
+            $('#skipped-1c4a5889-e94c-430a-9faa-13206e61e208').removeClass('show')
+            $('#skipped-collapse-1c4a5889-e94c-430a-9faa-13206e61e208').removeClass('show')
+            $('#skipped-7b475d24-053a-4708-9d0a-ade0e88af6e0').addClass('collapsed')
+            $('#skipped-collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0').addClass('collapsed')
+            $('#skipped-7b475d24-053a-4708-9d0a-ade0e88af6e0').removeClass('show')
+            $('#skipped-collapse-7b475d24-053a-4708-9d0a-ade0e88af6e0').removeClass('show')
+        $('#openAllSkipped').html("Expand All Skipped Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Failures -->
+
+<script>
+$('#openAllFailed').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+let failedItemContent
+let failedItemHeading
+switch (clickCount){
+    case 1:
+        $('#openAllFailed').html("Collapse All Failed Tests");
+        break;
+    case 2:
+        $('#openAllFailed').html("Expand All Failed Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Pretty Print the Response Body-->
+
+<script>
+function isJSON(data)
+{
+    var ret = true;
+    try {
+            JSON.parse(data);
+    }catch(e) {
+            ret = false;
+    }
+    return ret;
+}
+
+function isXML(data)
+{
+    return (data.length > 0 && data[0] === '<');
+}
+
+// see https://gist.github.com/sente/1083506/d2834134cd070dbcc08bf42ee27dabb746a1c54d#gistcomment-2254622
+function formatXML(data) {
+    const PADDING = ' '.repeat(2); // set desired indent size here
+    const reg = /(>)(<)(\/*)/g;
+    let pad = 0;
+    xml = data.replace(reg, '$1\r\n$2$3');
+
+    return xml.split('\r\n').map((node, index) => {
+        let indent = 0;
+        if (node.match(/.+<\/\w[^>]*>$/)) {
+            indent = 0;
+        } else if (node.match(/^<\/\w/) && pad > 0) {
+            pad -= 1;
+        } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+            indent = 1;
+        } else {
+            indent = 0;
+        }
+
+        pad += indent;
+        return PADDING.repeat(pad - indent) + node;
+    }).join('\r\n');
+}
+
+$(".prettyPrint").each(function () {
+        var data = $(this).text();
+        // Verify whether data is JSON
+        if(isJSON(data))
+        {
+                obj = JSON.parse(data);
+                data = JSON.stringify(obj, null, 2);
+        }
+        else if(isXML(data)) {
+            data = formatXML(data);
+        }
+        $(this).text(data);
+});
+</script>
+
+
+<!-- Copy Response Body To Clipboard -->
+
+<script>
+    var clipboard = new ClipboardJS('.copyButton');
+
+    clipboard.on('success', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-success text-white")
+        e.trigger.textContent = '✔ Copied!';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-success text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+    clipboard.on('error', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-danger text-white")
+        e.trigger.textContent = '✗ Not Copied';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-danger text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+
+</script>
+
+<!-- Render the Description Markdown and link in the test failures -->
+
+<script>
+    const remarkable = new Remarkable();
+
+    const descriptions = document.querySelectorAll(".renderMarkdown");
+    descriptions.forEach(description => {
+        description.innerHTML = renderHtmlFromMarkdown(description.textContent);
+    });
+    function renderHtmlFromMarkdown(markdown) {
+        return remarkable.render(trim(markdown));
+    }
+    function trim(string) {
+        return string ? string.replace(/^ +| +$/gm, "") : string;
+    }
+</script>
+
+<!-- Show/Hide The Toggles When Scrolling The Page -->
+
+<script>
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("topOfRequestsScreen").style.display = "block";
+    document.getElementById("topOfFailuresScreen").style.display = "block";
+    document.getElementById("topOfSkippedScreen").style.display = "block";
+    document.getElementById("openAll").style.display = "none";
+    document.getElementById("openAllRequests").style.display = "none";
+
+
+  } else {
+    document.getElementById("topOfRequestsScreen").style.display = "none";
+    document.getElementById("topOfFailuresScreen").style.display = "none";
+    document.getElementById("topOfSkippedScreen").style.display = "none";
+    document.getElementById("openAll").style.display = "block";
+    document.getElementById("openAllRequests").style.display = "block";
+
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+<!-- Creates The Iteration Tabs -->
+
+<script type="text/javascript">
+    "use strict";
+
+window.onload = function () {
+
+  // set display for all blocks of response
+  var allItems = document.querySelectorAll('[class*=iteration-]');
+  allItems.forEach(function(elem){
+    elem.style.display = 'block';
+  });
+
+   
+  let totalIterations = 1;
+   
+
+  let menu = document.querySelector('#execution-menu .nav');
+
+  for(var i = 0; i < totalIterations; i++)
+  {
+    let li = document.createElement('li');
+    li.appendChild(document.createTextNode((i + 1)));
+    li.setAttribute('id', 'iteration-' + i);
+    li.classList.add("custom-tab");
+    li.classList.add("itPassed");
+
+    li.addEventListener('click', function() {
+      //set display to none for all except row
+      let allItems = document.querySelectorAll('[class*=iteration-]:not(.row)');
+      allItems.forEach(function(elem) {
+        elem.style.display = 'none';
+      })
+
+      let allMenus = document.querySelectorAll('[id*=iteration-]');
+      allMenus.forEach(function(elem){
+        elem.style.borderBottom = 'none';
+      })
+
+      this.style.borderBottom = 'solid 3px #032a33';
+
+      let items = document.querySelectorAll("." + this.id + ':not(.row)');
+      items.forEach(function(elem) {
+        elem.style.display = elem.style.display == 'block' ? 'none' : 'block';
+      })
+    });
+    menu.appendChild(li);
+  }
+
+  //shows first tab data
+  document.getElementById('iteration-0').click();
+  document.getElementById('iterationSelected').innerHTML = `Iteration ${document.getElementById('iteration-0').innerHTML} selected`
+
+}
+</script>
+
+<!-- Create the Selected Iteration Label -->
+
+<script>
+$(document).ready(function(){
+    $(function() {
+        $("#iterationList li").click(function() {
+            document.getElementById('iterationSelected').innerHTML = "Iteration " + this.innerHTML + " selected"
+        });
+    });
+});
+</script>
+
+<!-- Filter Action for the Iterations -->
+
+<script>
+$("#filterInput").on("input paste", function() {
+    var value = $(this).val();
+    $("#iterationList li").filter(function() {
+	    $("#showOnlyFailures").data("clickCount") ? $("#showOnlyFailures").click():null;
+        $(this).toggle($(this).text().indexOf(value) > -1)
+    });
+});
+</script>
+
+<!-- Showing the Failed Interations -->
+
+<script>
+$('#showOnlyFailures').on('click', function(e) {
+    let clickCount = $(this).data("clickCount") || 1
+	$("#filterInput").val()!="" && clickCount==1 ? $("#filterInput").val('').trigger('input'): null;
+    let selectedIteration = $('#iterationList li').filter(function () {
+        return $(this).css('border-bottom').indexOf("solid") > -1 && $(this).hasClass('itFailed');
+    });
+    selectedIteration.length || clickCount > 1 ? null : $("#iterationList li.itFailed")[0].click()
+    $("#iterationList li.itPassed").toggle()
+    $("div.bg-success [id*=requests]").parents('[class^="row iteration-"]').toggle();
+    clickCount = clickCount > 1 ? 1 : ++clickCount;
+    clickCount > 1 ? $("#showOnlyFailures").html("Show All Iterations") : $("#showOnlyFailures").html("Show Failed Iterations");
+    $(this).data("clickCount", clickCount)
+})
+</script>
+</body>
+</html>

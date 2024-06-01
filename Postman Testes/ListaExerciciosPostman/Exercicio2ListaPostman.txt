@@ -1,0 +1,21 @@
+1. Quantas suítes de testes você desenvolveu? 
+Uma suíte de testes que contém seis cenários diferentes.
+
+2. Os testes desenvolvidos são manuais ou automatizados? 
+Automatizados, o Postman é uma ferramenta que facilita a automação de testes de API, então a ideia é que esses testes sejam automatizados.
+
+3. Onde os testes se localizam na pirâmide apresentada? 
+Os testes se enquadram principalmente no nível de testes de serviço da pirâmide de testes, que está entre a UI e as camadas de unidade.
+
+4. Os testes desenvolvidos são funcionais ou não-funcionais? 
+Os cenários mencionados são testes funcionais, pois estão verificando se a API está funcionando conforme o esperado em termos de resposta a requisições específicas.
+
+5. Alguns dos testes desenvolvidos são testes Fim-a-Fim (End-To-End)?
+ Os testes propostos não são estritamente testes End-To-End, pois estão focados em interações específicas com a API e não no fluxo completo de um processo de negócios.
+
+6. O que se deve fazer para que os testes desenvolvidos funcionem em modo regressão?
+ Para que os testes funcionem em modo de regressão, você deve:
+. Garantir que os testes sejam repetíveis e consistentes.
+. Parametrizar os testes para que possam ser executados com diferentes conjuntos de dados.
+. Integrar os testes em um pipeline de CI/CD para que sejam executados automaticamente a cada mudança no código.
+. Manter os testes atualizados com as mudanças na API para garantir que continuem relevantes e precisos.
